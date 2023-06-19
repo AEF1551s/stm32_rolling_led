@@ -6,6 +6,12 @@
 
 typedef enum
 {
+    HIGH = 0x1U,
+    LOW = !HIGH
+} pin_state;
+
+typedef enum
+{
     INPUT = 0x0U,
     OUTPUT = 0x1U,
     ALTERNATE = 0x2U,
@@ -38,6 +44,6 @@ typedef struct
     GPIO_TypeDef *GPIOx;
     pin_TypeDef pinx;
     pin_mode_TypeDef mode;
-    //TODO:Flag to check if the pin has already been set
+    // TODO:Flag to check if the pin has already been set
 } pin_struct_TypeDef;
 #endif // USER_TYPEDEFS_H
