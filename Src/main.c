@@ -31,7 +31,8 @@ void pin_init()
   LED6_SET_PIN_MODE_OUTPUT;
   LED7_SET_PIN_MODE_OUTPUT;
   LED8_SET_PIN_MODE_OUTPUT;
-  
+  //Set BUTTON pin to input mode (reset state)
+  BUTTON0_SET_PIN_MODE_INPUT;
 }
 
 int main(void)
