@@ -3,12 +3,13 @@
 
 #include <stm32f410rx.h>
 #include <stm32f4xx.h>
+#include <stdbool.h>
 
 typedef enum
 {
     HIGH = 0x1U,
     LOW = !HIGH
-} pin_state;
+} pin_state_TypeDef;
 
 typedef enum
 {
