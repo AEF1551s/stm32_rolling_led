@@ -67,6 +67,6 @@ int main(void)
         // Do reverse rolling leds
       }
     }
-    while (SET)
-      ;
-  }
+
+  } while (SET);
+}
