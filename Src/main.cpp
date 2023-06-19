@@ -43,9 +43,21 @@ int main(void)
 
   clock_init();
   pin_init();
-  
+
+  pin_struct_TypeDef LED_pins[9] = {LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8};
+
   /* Loop forever */
   do
   {
+    for (uint32_t i = 0; i < 9; i++)
+    {
+      uint32_t set_msk = 0x1U << LED_pins[i].pinx;
+      uint32_t reset_pin = (31 - (0xF - LED_pins[i].pinx)); //(31- (15-pin)) This gives register adress for the same pin
+      uint32_t reset_msk = 0x1U << reset_pin;
+
+      SET_BIT(LED_pins[i].GPIOx->BSRR, set_msk); // set pin
+
+      SET_BIT(LED_pins[i].GPIOx->BSRR, reset_msk); //reset pin
+    }
   } while (SET);
 }
