@@ -35,11 +35,16 @@ void pin_init()
   BUTTON0_SET_PIN_MODE_INPUT;
 }
 
+
+
 int main(void)
 {
   clock_init();
   pin_init();
+
   /* Loop forever */
-  for (;;)
-    ;
+  do{
+    
+
+  }while(SET);
 }
