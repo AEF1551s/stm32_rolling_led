@@ -52,11 +52,11 @@ int main(void)
     for (uint32_t i = 0; i < 9; i++)
     {
       uint32_t set_msk = 0x1U << LED_pins[i].pinx;
-      uint32_t reset_pin = (31 - (0xF - LED_pins[i].pinx)); //(31- (15-pin)) This gives register adress for the same pin
+      uint32_t reset_pin = (0x1F - (0xF - LED_pins[i].pinx)); //(31- (15-pin)) This gives register adress for the same pin
       uint32_t reset_msk = 0x1U << reset_pin;
 
       SET_BIT(LED_pins[i].GPIOx->BSRR, set_msk); // set pin
-      
+
       //TODO: Implement delay function
 
       SET_BIT(LED_pins[i].GPIOx->BSRR, reset_msk); //reset pin
