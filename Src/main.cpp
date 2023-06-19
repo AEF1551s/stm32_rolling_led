@@ -56,6 +56,8 @@ int main(void)
       uint32_t reset_msk = 0x1U << reset_pin;
 
       SET_BIT(LED_pins[i].GPIOx->BSRR, set_msk); // set pin
+      
+      //TODO: Implement delay function
 
       SET_BIT(LED_pins[i].GPIOx->BSRR, reset_msk); //reset pin
     }
