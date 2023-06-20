@@ -45,12 +45,15 @@ int main(void)
   pin_init();
 
   pin_struct_TypeDef LED_pins[9] = {LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8};
-
+  bool reverse = false;
   /* Loop forever */
   do
   {
+    // Check button state
+    reverse = (BTN0, HIGH) ? !reverse : reverse;
+
     // Rolling led loop
-    for (uint32_t i = 0; i < 9; i++)
+    for (uint32_t i = (reverse ? 8 : 0); (reverse ? i >= 0 : i <= 8); (reverse ? i-- : i++))
     {
       uint32_t set_msk = 0x1U << LED_pins[i].pinx;
       uint32_t reset_pin = (0x1F - (0xF - LED_pins[i].pinx)); //(31- (15-pin)) This gives register reset adress for the same pin
@@ -61,12 +64,6 @@ int main(void)
       // TODO: Implement delay function
 
       SET_BIT(LED_pins[i].GPIOx->BSRR, reset_msk); // reset pin
-
-      if (read_pin(BTN0, HIGH))
-      {
-        // Do reverse rolling leds
-      }
     }
-
-  } while (SET);
+  } while (true);
 }
