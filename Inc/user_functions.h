@@ -44,4 +44,8 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     return pin_struct;
 }
 
+void delay_ms()
+{
+    // TODO: Implement delay function
+}
 #endif // USER_FUNCTIONS_H
