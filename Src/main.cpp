@@ -5,6 +5,8 @@
 #endif
 
 // System includes
+#include <stm32f410rx.h>
+#include <stm32f4xx.h>
 
 // User includes
 #include <user_types.h>
@@ -50,7 +52,7 @@ int main(void)
   do
   {
     // Check button state
-    reverse = (BTN0, HIGH) ? !reverse : reverse;
+    reverse = read_pin(BTN0, HIGH) ? !reverse : reverse;
 
     // Rolling led loop
     for (uint32_t i = (reverse ? 8 : 0); (reverse ? i >= 0 : i <= 8); (reverse ? i-- : i++))
