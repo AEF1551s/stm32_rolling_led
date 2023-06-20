@@ -1,6 +1,9 @@
 #if !defined(USER_FUNCTIONS_H)
 #define USER_FUNCTIONS_H
 
+#include <stm32f410rx.h>
+#include <stm32f4xx.h>
+
 #include <user_types.h>
 
 void clock_init()
@@ -44,8 +47,4 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     return pin_struct;
 }
 
-void delay_ms()
-{
-    // TODO: Implement delay function
-}
 #endif // USER_FUNCTIONS_H

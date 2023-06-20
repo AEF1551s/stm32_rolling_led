@@ -3,6 +3,7 @@
 
 #include <stm32f410rx.h>
 #include <stm32f4xx.h>
+
 #include <stdbool.h>
 
 typedef enum
