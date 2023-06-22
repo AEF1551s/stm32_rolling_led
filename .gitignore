@@ -8,4 +8,4 @@ Startup
 rolling_led Debug.launch
 .cproject
 .project
-rolling_led Debug.launch
+STM32F410RBTX_FLASH.ld
