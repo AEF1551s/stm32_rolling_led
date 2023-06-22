@@ -47,4 +47,17 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     return pin_struct;
 }
 
+void digital_write(pin_struct_TypeDef pin, pin_state_TypeDef mode)
+{
+  if (mode == HIGH)
+  {
+    uint32_t set_msk = 0x1U << pin.pinx;
+    WRITE_REG(pin.GPIOx->BSRR, set_msk); // set pin
+    return;
+  }
+  uint32_t reset_pin = (0x1F - (0xF - pin.pinx));
+  uint32_t reset_msk = 0x1U << reset_pin;
+  WRITE_REG(pin.GPIOx->BSRR, reset_msk); // reset pin
+}
+
 #endif // USER_FUNCTIONS_H
