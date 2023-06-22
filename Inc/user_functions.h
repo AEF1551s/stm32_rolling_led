@@ -5,6 +5,7 @@
 #include <stm32f4xx.h>
 
 #include <user_types.h>
+#include <delay.h>
 
 void clock_init()
 {
@@ -29,7 +30,7 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     pin_struct.GPIOx = GPIOx;
     pin_struct.pinx = pinx;
     pin_struct.mode = mode;
-    
+
     uint32_t mode_pin = 2 * pinx;
 
     switch (mode)
@@ -49,49 +50,45 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
 
 void digital_write(pin_struct_TypeDef pin, pin_state_TypeDef mode)
 {
-  if (mode == HIGH)
-  {
-    uint32_t set_msk = 0x1U << pin.pinx;
-    WRITE_REG(pin.GPIOx->BSRR, set_msk); // set pin
-    return;
-  }
-  uint32_t reset_pin = (0x1F - (0xF - pin.pinx));
-  uint32_t reset_msk = 0x1U << reset_pin;
-  WRITE_REG(pin.GPIOx->BSRR, reset_msk); // reset pin
+    if (mode == HIGH)
+    {
+        uint32_t set_msk = 0x1U << pin.pinx;
+        WRITE_REG(pin.GPIOx->BSRR, set_msk); // set pin
+        return;
+    }
+    uint32_t reset_pin = (0x1F - (0xF - pin.pinx));
+    uint32_t reset_msk = 0x1U << reset_pin;
+    WRITE_REG(pin.GPIOx->BSRR, reset_msk); // reset pin
 }
 
-void led_array_increment(pin_struct_TypeDef LED_pins[9], int starting_position, int &delay)
+void led_array_decrement(pin_struct_TypeDef LED_pins[9], int &starting_position, int &delay)
 {
+    int i = starting_position;
 
-  int i = starting_position;
+    digital_write(LED_pins[i], HIGH);
+    delay_ms(delay);
+    digital_write(LED_pins[i], LOW);
 
-  digital_write(LED_pins[i], HIGH);
-  delay_ms(delay);
-  digital_write(LED_pins[i], LOW);
+    starting_position--;
 
-  i++;
-
-  if (i == 9)
-    i = 0;
-
-  led_array_increment(LED_pins, i, delay);
+    if (starting_position == -1)
+        starting_position = 8;
 }
 
-void led_array_decrement(pin_struct_TypeDef LED_pins[9], int starting_position, int &delay)
+void led_array_increment(pin_struct_TypeDef LED_pins[9], int &starting_position, int &delay)
 {
+    int i = starting_position;
 
-  int i = starting_position;
+    digital_write(LED_pins[i], HIGH);
+    delay_ms(delay);
+    digital_write(LED_pins[i], LOW);
 
-  digital_write(LED_pins[i], HIGH);
-  delay_ms(delay);
-  digital_write(LED_pins[i], LOW);
+    starting_position++;
 
-  i--;
-
-  if (i == -1)
-    i = 8;
-
-  led_array_decrement(LED_pins, i, delay);
+    if (starting_position == 9)
+        starting_position = 0;
 }
+
+// TODO: Implement pin toogle function
 
 #endif // USER_FUNCTIONS_H
