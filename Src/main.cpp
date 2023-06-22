@@ -30,45 +30,42 @@ void pin_init()
   // Set LED pins to general purpose output mode
   LED0 = pin_setup(GPIOC, PIN9, OUTPUT);
   LED1 = pin_setup(GPIOC, PIN8, OUTPUT);
-  LED2 = pin_setup(GPIOB, PIN8, OUTPUT);//
+  LED2 = pin_setup(GPIOB, PIN8, OUTPUT);
   LED3 = pin_setup(GPIOC, PIN6, OUTPUT);
   LED4 = pin_setup(GPIOB, PIN9, OUTPUT);
-  LED5 = pin_setup(GPIOC, PIN5, OUTPUT); //
+  LED5 = pin_setup(GPIOC, PIN5, OUTPUT);
   LED6 = pin_setup(GPIOA, PIN12, OUTPUT);
   LED7 = pin_setup(GPIOA, PIN6, OUTPUT);
   LED8 = pin_setup(GPIOA, PIN11, OUTPUT);
-  BTN0 = pin_setup(GPIOA, PIN3, INPUT);
-  // Set BUTTON pin to input mode (reset state)
+  BTN0 = pin_setup(GPIOB, PIN5, INPUT);
+  SET_BIT(BTN0.GPIOx->PUPDR, 0x2U << 2 * BTN0.pinx); // Set BTN0 in pulldown mode
 }
 
 int main(void)
 {
-
   clock_init();
   pin_init();
 
   pin_struct_TypeDef LED_pins[9] = {LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8};
-  bool reverse = true;
-  /* Loop forever */
 
+  bool reverse_flag = false;
+
+  int delay = 50;
+  int starting_position = 0;
+
+  /* Loop forever */
   do
   {
-    // Check button state
-    // reverse = read_pin(BTN0, HIGH) ? !reverse : reverse;
+    if (read_pin(BTN0, HIGH))
+      reverse_flag = !reverse_flag;
 
-    // Rolling led loop
-    for (uint32_t i = reverse ? 8 : 0; reverse ? (i >= 0) : (i <= 8); reverse ? (i--) : (i++))
+    if (reverse_flag)
     {
-      uint32_t set_msk = 0x1U << LED_pins[i].pinx;
-      uint32_t reset_pin = (0x1F - (0xF - LED_pins[i].pinx)); //(31- (15-pin)) This gives register reset adress for the same pin
-      uint32_t reset_msk = 0x1U << reset_pin;
-
-      delay_ms(25);
-      WRITE_REG(LED_pins[i].GPIOx->BSRR, set_msk); // set pin
-      delay_ms(25);
-      WRITE_REG(LED_pins[i].GPIOx->BSRR, reset_msk); // reset pin
-
+      led_array_decrement(LED_pins, starting_position, delay);
     }
-
+    else
+    {
+      led_array_increment(LED_pins, starting_position, delay);
+    }
   } while (true);
 }
