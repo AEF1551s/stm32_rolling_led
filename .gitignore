@@ -1,3 +1,11 @@
-Debug
+#Unused libraries
 nucleo_pins_UNUSED.h
+
+#CubeIDE
+Debug
+Startup
+.settings
+rolling_led Debug.launch
+.cproject
+.project
 rolling_led Debug.launch
