@@ -4,10 +4,14 @@
 #include <stm32f410rx.h>
 #include <stm32f4xx.h>
 
-void delay_ms()
+void delay_ms(int delay)
 {
-    // TODO: Implement delay function
-
+    volatile int i; // try to stop optimisation removing loops
+    for (; delay > 0; delay--)
+    {
+        for (i = 0; i < 3195; i++)
+            ;
+    }
 }
 
 #endif // DELAY_H
