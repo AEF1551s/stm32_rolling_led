@@ -11,6 +11,7 @@
 // User includes
 #include <user_types.h>
 #include <user_functions.h>
+#include <delay.h>
 
 // Define all used gpio pins
 pin_struct_TypeDef LED0;
@@ -29,14 +30,14 @@ void pin_init()
   // Set LED pins to general purpose output mode
   LED0 = pin_setup(GPIOC, PIN9, OUTPUT);
   LED1 = pin_setup(GPIOC, PIN8, OUTPUT);
-  LED2 = pin_setup(GPIOB, PIN8, OUTPUT);
+  LED2 = pin_setup(GPIOB, PIN8, OUTPUT);//
   LED3 = pin_setup(GPIOC, PIN6, OUTPUT);
   LED4 = pin_setup(GPIOB, PIN9, OUTPUT);
-  LED5 = pin_setup(GPIOA, PIN5, OUTPUT);
+  LED5 = pin_setup(GPIOC, PIN5, OUTPUT); //
   LED6 = pin_setup(GPIOA, PIN12, OUTPUT);
   LED7 = pin_setup(GPIOA, PIN6, OUTPUT);
   LED8 = pin_setup(GPIOA, PIN11, OUTPUT);
-  BTN0 = pin_setup(GPIOB, PIN2, INPUT);
+  BTN0 = pin_setup(GPIOA, PIN3, INPUT);
   // Set BUTTON pin to input mode (reset state)
 }
 
@@ -47,23 +48,27 @@ int main(void)
   pin_init();
 
   pin_struct_TypeDef LED_pins[9] = {LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8};
-  bool reverse = false;
+  bool reverse = true;
   /* Loop forever */
+
   do
   {
     // Check button state
-    reverse = read_pin(BTN0, HIGH) ? !reverse : reverse;
+    // reverse = read_pin(BTN0, HIGH) ? !reverse : reverse;
 
     // Rolling led loop
-    for (uint32_t i = (reverse ? 8 : 0); (reverse ? i >= 0 : i <= 8); (reverse ? i-- : i++))
+    for (uint32_t i = reverse ? 8 : 0; reverse ? (i >= 0) : (i <= 8); reverse ? (i--) : (i++))
     {
       uint32_t set_msk = 0x1U << LED_pins[i].pinx;
       uint32_t reset_pin = (0x1F - (0xF - LED_pins[i].pinx)); //(31- (15-pin)) This gives register reset adress for the same pin
       uint32_t reset_msk = 0x1U << reset_pin;
 
-      SET_BIT(LED_pins[i].GPIOx->BSRR, set_msk); // set pin
+      delay_ms(25);
+      WRITE_REG(LED_pins[i].GPIOx->BSRR, set_msk); // set pin
+      delay_ms(25);
+      WRITE_REG(LED_pins[i].GPIOx->BSRR, reset_msk); // reset pin
 
-      SET_BIT(LED_pins[i].GPIOx->BSRR, reset_msk); // reset pin
     }
+
   } while (true);
 }
