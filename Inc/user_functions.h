@@ -29,7 +29,7 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     pin_struct.GPIOx = GPIOx;
     pin_struct.pinx = pinx;
     pin_struct.mode = mode;
-
+    
     uint32_t mode_pin = 2 * pinx;
 
     switch (mode)
@@ -38,7 +38,7 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
         SET_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
         break;
     case INPUT:
-        CLEAR_BIT(pin_struct.GPIOx->MODER, ~mode << mode_pin);
+        CLEAR_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
         break;
     default:
         break;
