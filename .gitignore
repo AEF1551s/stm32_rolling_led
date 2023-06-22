@@ -3,7 +3,7 @@ nucleo_pins_UNUSED.h
 
 #CubeIDE
 Debug
-Startup
+Startup 
 .settings
 rolling_led Debug.launch
 .cproject
