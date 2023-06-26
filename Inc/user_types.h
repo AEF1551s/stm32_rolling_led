@@ -23,6 +23,15 @@ typedef enum
 
 typedef enum
 {
+    NONE = 0X0U,
+    PULLUP = 0x1U,
+    PULLDOWN = 0x2U,
+    RESERVED = 0x3U
+
+} pupd_mode_TypeDef;
+
+typedef enum
+{
     PIN0 = 0U,
     PIN1 = 1U,
     PIN2 = 2U,
