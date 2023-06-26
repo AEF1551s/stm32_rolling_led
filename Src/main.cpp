@@ -38,7 +38,7 @@ void pin_init()
   LED7 = pin_setup(GPIOA, PIN6, OUTPUT);
   LED8 = pin_setup(GPIOA, PIN11, OUTPUT);
   BTN0 = pin_setup(GPIOB, PIN5, INPUT);
-  SET_BIT(BTN0.GPIOx->PUPDR, 0x2U << 2 * BTN0.pinx); // Set BTN0 in pulldown mode
+  set_input_pull_mode(BTN0, PULLDOWN);
 }
 
 int main(void)
