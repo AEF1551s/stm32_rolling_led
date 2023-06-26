@@ -48,6 +48,29 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     return pin_struct;
 }
 
+void set_input_pull_mode(pin_struct_TypeDef pin, pupd_mode_TypeDef input_mode)
+{
+    if (pin.mode != INPUT)
+        return;
+    switch (input_mode)
+    {
+    case NONE:
+        CLEAR_BIT(pin.GPIOx->PUPDR, !NONE << 2 * pin.pinx);
+        break;
+    case PULLDOWN:
+        SET_BIT(pin.GPIOx->PUPDR, PULLDOWN << 2 * pin.pinx);
+        break;
+    case PULLUP:
+        SET_BIT(pin.GPIOx->PUPDR, PULLUP << 2 * pin.pinx);
+        break;
+    case RESERVED:
+        SET_BIT(pin.GPIOx->PUPDR, RESERVED << 2 * pin.pinx);
+        break;
+    default:
+        break;
+    }
+}
+
 void digital_write(pin_struct_TypeDef pin, pin_state_TypeDef mode)
 {
     if (mode == HIGH)
