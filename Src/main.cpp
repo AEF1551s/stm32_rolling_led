@@ -24,6 +24,17 @@ pin_struct_TypeDef LED6;
 pin_struct_TypeDef LED7;
 pin_struct_TypeDef LED8;
 pin_struct_TypeDef BTN0;
+pin_struct_TypeDef led_delay_control;
+
+void clock_init()
+{
+  // Clock enable PORT A, B, C
+  SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
+  SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN);
+  SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN);
+  // APB2ENR for ADC
+  SET_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC1EN);
+}
 
 void pin_init()
 {
@@ -37,8 +48,11 @@ void pin_init()
   LED6 = pin_setup(GPIOA, PIN12, OUTPUT);
   LED7 = pin_setup(GPIOA, PIN6, OUTPUT);
   LED8 = pin_setup(GPIOA, PIN11, OUTPUT);
+  // Set button input pin and pull mode
   BTN0 = pin_setup(GPIOB, PIN5, INPUT);
   set_input_pull_mode(BTN0, PULLDOWN);
+  // Set analog pin
+  led_delay_control = pin_setup(GPIOA, PIN1, ANALOG);
 }
 
 int main(void)
@@ -56,6 +70,9 @@ int main(void)
   /* Loop forever */
   do
   {
+    // Read variable resistor input
+    // Change delay in proportion to vr input
+
     if (read_pin(BTN0, HIGH))
       reverse_flag = !reverse_flag;
 
