@@ -7,14 +7,6 @@
 #include <user_types.h>
 #include <delay.h>
 
-void clock_init()
-{
-    // Clock enable PORT A, B, C
-    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
-    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN);
-    SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN);
-}
-
 bool read_pin(pin_struct_TypeDef &pin, pin_state_TypeDef state_bit)
 {
     uint32_t bit_mask = 0x1U << pin.pinx;
@@ -40,6 +32,9 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
         break;
     case INPUT:
         CLEAR_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
+        break;
+    case ANALOG:
+        SET_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
         break;
     default:
         break;
@@ -112,6 +107,9 @@ void led_array_increment(pin_struct_TypeDef LED_pins[9], int &starting_position,
         starting_position = 0;
 }
 
+void read_analog()
+{
+}
 // TODO: Implement pin toogle function
 
 #endif // USER_FUNCTIONS_H
