@@ -107,9 +107,16 @@ void led_array_increment(pin_struct_TypeDef LED_pins[9], int &starting_position,
         starting_position = 0;
 }
 
-void read_analog()
-{
+uint32_t linear_distribution_12_bit(uint32_t input_value, uint32_t max_value)
+{ // Takes 16bit input value and converts it linearly
+    uint32_t linear_value = (input_value * max_value) / 4096;
+    if (linear_value <= 9)
+    {
+        return 9; // Hard limit, if value aproaches 0
+    }
+    return linear_value;
 }
+
 // TODO: Implement pin toogle function
 
 #endif // USER_FUNCTIONS_H
