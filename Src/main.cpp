@@ -12,6 +12,7 @@
 #include <user_types.h>
 #include <user_functions.h>
 #include <delay.h>
+#include <adc.h>
 
 // Define all used gpio pins
 pin_struct_TypeDef LED0;
@@ -32,7 +33,7 @@ void clock_init()
   SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
   SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOBEN);
   SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN);
-  // APB2ENR for ADC
+  // APB2 clock enable for ADC
   SET_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC1EN);
 }
 
@@ -59,19 +60,18 @@ int main(void)
 {
   clock_init();
   pin_init();
+  analog_init();
 
   pin_struct_TypeDef LED_pins[9] = {LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8};
 
   bool reverse_flag = false;
-
-  int delay = 50;
   int starting_position = 0;
+  int delay;
 
   /* Loop forever */
   do
   {
-    // Read variable resistor input
-    // Change delay in proportion to vr input
+    delay = linear_distribution_12_bit(single_analog_read_pa1(), 150);
 
     if (read_pin(BTN0, HIGH))
       reverse_flag = !reverse_flag;
