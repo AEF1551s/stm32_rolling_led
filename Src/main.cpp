@@ -74,8 +74,9 @@ int main(void)
     delay = linear_distribution_12_bit(single_analog_read_pa1(), 150);
 
     if (read_pin(BTN0, HIGH))
+    {
       reverse_flag = !reverse_flag;
-
+    }
     if (reverse_flag)
     {
       led_array_decrement(LED_pins, starting_position, delay);

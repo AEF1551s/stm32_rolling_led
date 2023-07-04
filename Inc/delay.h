@@ -6,13 +6,15 @@
 
 void delay_ms(int delay)
 {
-    //TODO: Use timers.
-    
+    // TODO: Use timers.
+
     volatile int i; // try to stop optimisation removing loops
     for (; delay > 0; delay--)
     {
         for (i = 0; i < 3195; i++)
+        {
             ;
+        }
     }
 }
 

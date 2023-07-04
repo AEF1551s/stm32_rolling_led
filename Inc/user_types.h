@@ -57,4 +57,5 @@ typedef struct
     pin_mode_TypeDef mode;
     // TODO:Flag to check if the pin has already been set
 } pin_struct_TypeDef;
+
 #endif // USER_TYPEDEFS_H
