@@ -9,12 +9,12 @@ void analog_init()
     // Set ADC channel count
     uint32_t channel_count = 0x0000U; // 1 channel to convert
     SET_BIT(ADC1->SQR1, channel_count << ADC_SQR1_L_Pos);
-    
+
     // Set CH1 (PA1 pin) first in sequence.
     SET_BIT(ADC1->SQR3, 0x0001U << ADC_SQR3_SQ1_Pos);
 }
 
-uint32_t single_analog_read_pa1() //TODO: Add universal analog_read for any supported pin
+uint32_t simple_analog_read_pa1() //TODO: Add universal analog_read for any supported pin
 {
 
     // ADC ON
