@@ -14,6 +14,10 @@
 #include <delay.h>
 #include <adc.h>
 
+/*********DEBUG ONLY*********/
+#include <stdio.h>
+#include <debug_functons.h>
+
 // Define all used gpio pins
 pin_struct_TypeDef LED0;
 pin_struct_TypeDef LED1;
@@ -58,9 +62,14 @@ void pin_init()
 
 int main(void)
 {
+/*********DEBUG ONLY START*********/
+/*********DEBUG ONLY END*********/
+
+  bool continous_conversion = true;
+
   clock_init();
   pin_init();
-  analog_init();
+  analog_init(continous_conversion);
 
   pin_struct_TypeDef LED_pins[9] = {LED0, LED1, LED2, LED3, LED4, LED5, LED6, LED7, LED8};
 
@@ -71,8 +80,7 @@ int main(void)
   /* Loop forever */
   do
   {
-    delay = linear_distribution_12_bit(single_analog_read_pa1(), 150);
-
+    delay = linear_distribution_12_bit(continous_conversion_read_pa1(), 150);
     if (read_pin(BTN0, HIGH))
     {
       reverse_flag = !reverse_flag;
@@ -85,5 +93,8 @@ int main(void)
     {
       led_array_increment(LED_pins, starting_position, delay);
     }
+
+    printf("delay: ", delay);
+
   } while (true);
 }
