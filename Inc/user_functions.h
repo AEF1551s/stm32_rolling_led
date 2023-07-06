@@ -6,6 +6,7 @@
 
 #include <user_types.h>
 #include <delay.h>
+#include <adc.h>
 
 bool read_pin(pin_struct_TypeDef &pin, pin_state_TypeDef state_bit)
 {
