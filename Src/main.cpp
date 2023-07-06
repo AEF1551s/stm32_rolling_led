@@ -77,7 +77,8 @@ int main(void)
   /* Loop forever */
   do
   {
-    delay = linear_distribution_12_bit(continous_conversion_read_pa1(), 150);
+    delay = linear_distribution_12_bit(analog_read(led_delay_control, continous_conversion), 150);
+    
     if (read_pin(BTN0, HIGH))
     {
       reverse_flag = !reverse_flag;

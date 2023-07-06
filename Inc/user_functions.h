@@ -45,7 +45,7 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
     return pin_struct;
 }
 
-void set_input_pull_mode(pin_struct_TypeDef pin, pupd_mode_TypeDef input_mode)
+void set_input_pull_mode(pin_struct_TypeDef &pin, pupd_mode_TypeDef input_mode)
 {
     if (pin.mode != INPUT)
     {
@@ -70,7 +70,7 @@ void set_input_pull_mode(pin_struct_TypeDef pin, pupd_mode_TypeDef input_mode)
     }
 }
 
-void digital_write(pin_struct_TypeDef pin, pin_state_TypeDef mode)
+void digital_write(pin_struct_TypeDef &pin, pin_state_TypeDef mode)
 {
     if (mode == HIGH)
     {
@@ -81,7 +81,7 @@ void digital_write(pin_struct_TypeDef pin, pin_state_TypeDef mode)
 
     uint32_t reset_pin = (0x1F - (0xF - pin.pinx));
     uint32_t reset_msk = 0x1U << reset_pin;
-    
+
     WRITE_REG(pin.GPIOx->BSRR, reset_msk); // reset pin
 }
 
@@ -118,7 +118,12 @@ void led_array_increment(pin_struct_TypeDef LED_pins[9], int &starting_position,
 }
 
 uint32_t linear_distribution_12_bit(uint32_t input_value, uint32_t max_value)
-{ // Takes 16bit input value and converts it linearly
+{ // Takes 12bit input value and converts it linearly
+    if (input_value == 5000)
+    {
+        return 0;
+    }
+
     uint32_t linear_value = (input_value * max_value) / 4096;
 
     if (linear_value <= 9)

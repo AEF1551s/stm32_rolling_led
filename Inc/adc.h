@@ -28,31 +28,54 @@ void analog_init(bool &continous_conv)
     }
 }
 
-uint32_t continous_conversion_read_pa1()
+bool check_analog_pin(pin_struct_TypeDef &pin)
 {
-    bool ready_to_read = false;
-    do
+    uint32_t analog_mode_mask = ~(0x11U << (pin.pinx * 2));
+
+    // Checks if the pin is setup as analog
+    if (!READ_BIT(pin.GPIOx->MODER, analog_mode_mask))
     {
-        ready_to_read = READ_BIT(ADC1->SR, ADC_SR_EOC) ? true : false;
-    } while (!ready_to_read);
+        return false;
+    }
 
-    // Read result
-    uint32_t read_value = ADC1->DR;
+    // Checks if pin is analog based on NUCLEO-F410RB board pinout
+    if ((pin.GPIOx == GPIOA) && (pin.pinx == 0 || pin.pinx == 1 || pin.pinx == 4))
+    {
+        return true;
+    }
 
-    return read_value;
+    if ((pin.GPIOx == GPIOB) && (pin.pinx == 0))
+    {
+        return true;
+    }
+
+    if ((pin.GPIOx == GPIOC) && (pin.pinx == 0 || pin.pinx == 1))
+    {
+        return true;
+    }
+
+    return false;
 }
 
-uint32_t simple_analog_read_pa1() // TODO: Add universal analog_read for any supported pin
+uint32_t analog_read(pin_struct_TypeDef &pin, bool &continious_conversion)
 {
+    // If pin is not for analog return some value
+    if (!check_analog_pin(pin))
+    {
+        return 5000;
+    }
 
-    // ADC ON
-    SET_BIT(ADC1->CR2, ADC_CR2_ADON);
+    if (!continious_conversion)
+    {
+        // ADC ON
+        SET_BIT(ADC1->CR2, ADC_CR2_ADON);
 
-    // Start conversion
-    SET_BIT(ADC1->CR2, ADC_CR2_SWSTART);
+        // Start conversion
+        SET_BIT(ADC1->CR2, ADC_CR2_SWSTART);
 
-    // Set conversion not complete
-    CLEAR_BIT(ADC1->SR, ADC_SR_EOC);
+        // Set conversion not complete
+        CLEAR_BIT(ADC1->SR, ADC_SR_EOC);
+    }
 
     // Wait to conversion to be completeS
     bool ready_to_read = false;
@@ -61,11 +84,13 @@ uint32_t simple_analog_read_pa1() // TODO: Add universal analog_read for any sup
         ready_to_read = READ_BIT(ADC1->SR, ADC_SR_EOC) ? true : false;
     } while (!ready_to_read);
 
-    // Read result
     uint32_t read_value = ADC1->DR;
 
-    // End conversion
-    CLEAR_BIT(ADC1->CR2, ADC_CR2_SWSTART);
+    if (!continious_conversion)
+    {
+        // End conversion
+        CLEAR_BIT(ADC1->CR2, ADC_CR2_SWSTART);
+    }
 
     return read_value;
 }
