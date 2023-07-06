@@ -4,7 +4,7 @@
 #include <stm32f410rx.h>
 #include <stm32f4xx.h>
 
-void analog_init()
+void analog_init(bool &continous_conv)
 {
     // Set ADC channel count
     uint32_t channel_count = 0x0000U; // 1 channel to convert
@@ -12,9 +12,37 @@ void analog_init()
 
     // Set CH1 (PA1 pin) first in sequence.
     SET_BIT(ADC1->SQR3, 0x0001U << ADC_SQR3_SQ1_Pos);
+
+    // Enable continous conversion mode
+    if (continous_conv)
+    {
+        SET_BIT(ADC1->CR2, ADC_CR2_CONT);
+        // ADC ON
+        SET_BIT(ADC1->CR2, ADC_CR2_ADON);
+        // Start conversion
+        SET_BIT(ADC1->CR2, ADC_CR2_SWSTART);
+    }
+    else
+    {
+        CLEAR_BIT(ADC1->CR2, ADC_CR2_CONT);
+    }
 }
 
-uint32_t simple_analog_read_pa1() //TODO: Add universal analog_read for any supported pin
+uint32_t continous_conversion_read_pa1()
+{
+    bool ready_to_read = false;
+    do
+    {
+        ready_to_read = READ_BIT(ADC1->SR, ADC_SR_EOC) ? true : false;
+    } while (!ready_to_read);
+
+    // Read result
+    uint32_t read_value = ADC1->DR;
+
+    return read_value;
+}
+
+uint32_t simple_analog_read_pa1() // TODO: Add universal analog_read for any supported pin
 {
 
     // ADC ON
@@ -33,10 +61,10 @@ uint32_t simple_analog_read_pa1() //TODO: Add universal analog_read for any supp
         ready_to_read = READ_BIT(ADC1->SR, ADC_SR_EOC) ? true : false;
     } while (!ready_to_read);
 
-    // read result
+    // Read result
     uint32_t read_value = ADC1->DR;
 
-    // end conversion
+    // End conversion
     CLEAR_BIT(ADC1->CR2, ADC_CR2_SWSTART);
 
     return read_value;
