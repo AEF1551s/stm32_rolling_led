@@ -30,14 +30,6 @@ void analog_init(bool &continous_conv)
 
 bool check_analog_pin(pin_struct_TypeDef &pin)
 {
-    uint32_t analog_mode_mask = ~(0x11U << (pin.pinx * 2));
-
-    // Checks if the pin is setup as analog
-    if (!READ_BIT(pin.GPIOx->MODER, analog_mode_mask))
-    {
-        return false;
-    }
-
     // Checks if pin is analog based on NUCLEO-F410RB board pinout
     if ((pin.GPIOx == GPIOA) && (pin.pinx == 0 || pin.pinx == 1 || pin.pinx == 4))
     {
@@ -57,14 +49,8 @@ bool check_analog_pin(pin_struct_TypeDef &pin)
     return false;
 }
 
-uint32_t analog_read(pin_struct_TypeDef &pin, bool &continious_conversion)
+uint32_t analog_read(bool &continious_conversion)
 {
-    // If pin is not for analog return some value
-    if (!check_analog_pin(pin))
-    {
-        return 5000;
-    }
-
     if (!continious_conversion)
     {
         // ADC ON

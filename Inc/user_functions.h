@@ -36,7 +36,11 @@ pin_struct_TypeDef pin_setup(GPIO_TypeDef *GPIOx, pin_TypeDef pinx, pin_mode_Typ
         CLEAR_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
         break;
     case ANALOG:
-        SET_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
+        // If pin is for analog
+        if (check_analog_pin(pin_struct))
+        {
+            SET_BIT(pin_struct.GPIOx->MODER, mode << mode_pin);
+        }
         break;
     default:
         break;
