@@ -62,9 +62,6 @@ void pin_init()
 
 int main(void)
 {
-/*********DEBUG ONLY START*********/
-/*********DEBUG ONLY END*********/
-
   bool continous_conversion = true;
 
   clock_init();
@@ -94,7 +91,9 @@ int main(void)
       led_array_increment(LED_pins, starting_position, delay);
     }
 
+    /*********DEBUG ONLY START*********/
     printf("delay: ", delay);
+    /*********DEBUG ONLY END*********/
 
   } while (true);
 }
