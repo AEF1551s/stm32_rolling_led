@@ -1,0 +1,11 @@
+#Unused libraries
+nucleo_pins_UNUSED.h
+
+#CubeIDE
+Debug
+Startup 
+.settings
+rolling_led Debug.launch
+.cproject
+.project
+STM32F410RBTX_FLASH.ld
