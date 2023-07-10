@@ -2,6 +2,7 @@
 
 This is simple excercise for STM32F410RBT6 microcontroller which is part of NUCLEO development board.  
 The goal is to write a program for a scrolling LEDs row with at least nine LEDs and one button that changes the running direction when pressed.  
+This program uses 9 LEDs, 1 variable resistor for changing the delay between flashes and button to change direction of the LEDs.  
 
 This project includes minimal headers for STM32F4xx.  
 This project **does not** include any HAL header files.  
