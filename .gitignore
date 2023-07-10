@@ -5,7 +5,7 @@ nucleo_pins_UNUSED.h
 Debug
 Startup 
 .settings
-rolling_led Debug.launch
+*.launch
 .cproject
 .project
 STM32F410RBTX_FLASH.ld
