@@ -4,18 +4,22 @@
 #include <stm32f410rx.h>
 #include <stm32f4xx.h>
 
-void delay_ms(int delay)
-{
-    // TODO: Use timers.
+#define SYSTICK_LOAD_VAL_MS 16000UL
 
-    volatile int i; // try to stop optimisation removing loops
-    for (; delay > 0; delay--)
+void delay_ms(uint32_t delay)
+{
+    SysTick->LOAD = SYSTICK_LOAD_VAL_MS;
+
+    WRITE_REG(SysTick->VAL, 0UL);
+
+    SET_BIT(SysTick->CTRL, 1U << SysTick_CTRL_CLKSOURCE_Pos);
+    SET_BIT(SysTick->CTRL, 1U << SysTick_CTRL_ENABLE_Pos);
+
+    for (uint32_t i = 0; i < delay; i++)
     {
-        for (i = 0; i < 3195; i++)
-        {
+        while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0)
             ;
-        }
     }
 }
 
-#endif // DELAY_H
+#endif DELAY_H
