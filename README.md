@@ -1,4 +1,4 @@
-# STM32 excercise 1  
+# STM32 rolling led
 
 This is simple excercise for STM32F410RBT6 microcontroller which is part of NUCLEO development board.  
 The goal is to write a program for a scrolling LEDs row with at least nine LEDs and one button that changes the running direction when pressed.  
